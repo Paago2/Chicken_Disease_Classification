@@ -1,0 +1,28 @@
+params:
+  base_model:
+    image_size: [224, 224]
+    model_name: 'EfficientNetB5'
+    weights: 'imagenet'
+    include_top: False
+    pooling: 'max'
+  full_model:
+    dropout_rate1: 0.3
+    dropout_rate2: 0.45
+    dense_1024_regularizer_l2: 0.016
+    dense_1024_regularizer_l1: 0.006
+    dense_128_regularizer_l2: 0.016
+    dense_128_regularizer_l1: 0.006
+  learning_rate: 0.001
+  classes: 10
+  epochs: 50
+  ask_epoch: 10
+
+  data_ingestion:
+    train_size: 0.9
+    test_size: 0.05
+    validation_size: 0.05
+    random_state: 123
+    max_samples: 500
+    min_samples: 0
+    img_size: [224, 224]
+    working_dir: ./working_dir
