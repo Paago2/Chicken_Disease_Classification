@@ -1,5 +1,3 @@
-data_ingestion:
-
 artifacts_root: artifacts
 
 data_ingestion:
@@ -7,3 +5,5 @@ data_ingestion:
   source: C:\\Users\\paago\\Downloads\\Chicken_Fecal.zip
   local_data_file: artifacts/data_ingestion/data.zip
   unzip_dir: artifacts/data_ingestion
+  source_csv: artifacts\\data_ingestion\\Fecal_data.csv
+
