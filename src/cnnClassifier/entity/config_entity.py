@@ -17,3 +17,4 @@ class DataIngestionConfig:
     min_samples: int = None
     img_size: list = None
     working_dir: str = None
+    batch_size: int = None
