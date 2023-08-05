@@ -1,3 +1,4 @@
+
 from cnnClassifier.config.configuration import ConfigurationManager
 from cnnClassifier.components.data_ingestion import DataIngestion
 from cnnClassifier import logger
@@ -22,7 +23,7 @@ class DataIngestionTrainingPipeline:
 
         # The data ingestion process, including file downloading and extraction, is executed here
         logger.info("Executing data ingestion process.")
-        train_df, test_df, valid_df = data_ingestion.execute()
+        train_df, test_df, valid_df, train_gen, valid_gen, test_gen, test_batch_size, test_steps = data_ingestion.execute()
         logger.info("Data ingestion process executed successfully.")
 
         # Print a few lines of each DataFrame for verification
@@ -33,12 +34,14 @@ class DataIngestionTrainingPipeline:
         print("\nValidation DataFrame:")
         print(valid_df.head())
 
+        return train_df, test_df, valid_df, train_gen, valid_gen, test_gen, test_batch_size, test_steps
+
 
 if __name__ == '__main__':
     try:
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = DataIngestionTrainingPipeline()
-        obj.main()
+        train_df, test_df, valid_df, train_gen, valid_gen, test_gen, test_batch_size, test_steps = obj.main()
         logger.info(
             f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
     except Exception as e:

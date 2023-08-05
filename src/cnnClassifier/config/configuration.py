@@ -8,17 +8,26 @@ from sklearn.model_selection import train_test_split
 import shutil
 from cnnClassifier.constants import CONFIG_FILE_PATH, PARAMS_FILE_PATH
 from cnnClassifier.utils.common import read_yaml, create_directories, get_size
-from cnnClassifier.entity.config_entity import DataIngestionConfig
+from cnnClassifier.entity.config_entity import (
+    DataIngestionConfig, PrepareBaseModelConfig)
 from cnnClassifier import logger
+from keras.applications import EfficientNetB5
+from keras.layers import Dense, Dropout, BatchNormalization
+from keras.models import Model
+from keras.optimizers import Adamax
+from keras import regularizers
+import tensorflow as tf
 
 
 class ConfigurationManager:
     def __init__(self, config_filepath=CONFIG_FILE_PATH, params_filepath=PARAMS_FILE_PATH):
         self.config = read_yaml(config_filepath)
-        print("Config: ", self.config)
         self.params = read_yaml(params_filepath)
-        print("Params: ", self.params)
-        create_directories([self.config.data_ingestion.root_dir])
+        create_directories([
+            self.config.data_ingestion.root_dir,
+            self.config.artifacts_root,
+            self.config.prepare_base_model.root_dir
+        ])
 
     def copy_zip_data(self):
         source_path = self.config.data_ingestion.source
@@ -68,3 +77,28 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+
+    def get_prepare_base_model_config(self):
+        config = self.config.prepare_base_model
+        create_directories([config.root_dir])
+
+        prepare_base_model_config = PrepareBaseModelConfig(
+            root_dir=Path(config.root_dir),
+            base_model_path=Path(config.base_model_path),
+            updated_base_model_path=Path(config.updated_base_model_path),
+            params_image_size=self.params.base_model.image_size,
+            params_learning_rate=self.params.learning_rate,
+            params_include_top=self.params.base_model.include_top,
+            params_weights=self.params.base_model.weights,
+            params_classes=self.params.classes,
+            params_model_name=self.params.base_model.model_name,
+            params_pooling=self.params.base_model.pooling,
+            params_dropout_rate1=self.params.base_model.dropout_rate1,
+            params_dropout_rate2=self.params.base_model.dropout_rate2,
+            params_dense_1024_regularizer_l2=self.params.base_model.dense_1024_regularizer_l2,
+            params_dense_1024_regularizer_l1=self.params.base_model.dense_1024_regularizer_l1,
+            params_dense_128_regularizer_l2=self.params.base_model.dense_128_regularizer_l2,
+            params_dense_128_regularizer_l1=self.params.base_model.dense_128_regularizer_l1
+        )
+
+        return prepare_base_model_config

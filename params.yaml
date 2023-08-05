@@ -4,7 +4,6 @@ base_model:
   weights: 'imagenet'
   include_top: False
   pooling: 'max'
-full_model:
   dropout_rate1: 0.3
   dropout_rate2: 0.45
   dense_1024_regularizer_l2: 0.016
